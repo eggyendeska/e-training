@@ -38,6 +38,20 @@
 			.popover{
 				max-width:700px;
 			}
+			
+			.videoWrapper {
+				position: relative;
+				padding-bottom: 35.25%; /* 16:9 */
+				padding-top: 25px;
+				height: 0;
+			}
+			.videoWrapper iframe {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+			}
 		</style>
 		<!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

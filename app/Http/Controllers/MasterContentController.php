@@ -83,10 +83,59 @@ class MasterContentController extends Controller
      * @param  \App\Content  $content
      * @return \Illuminate\Http\Response
      */
-    public function show(Content $content)
+    public function show($id)
     {
-        //
+		try {
+			$id = Crypt::decrypt($id);
+		} catch (DecryptException $e) {
+			return 0;
+		}
+		
+        $content = Content::join('categories as c', 'c.id', '=', 'contents.categories_id')
+							->join('sources as s', 's.id', '=', 'contents.sources_id')
+							->join('users as u', 'u.id', '=', 'contents.users_id')
+							->select('contents.*', 'c.name as categories_name', 's.name as sources_name', 'u.name as users_name', 's.embed_code')
+							->where('contents.id',$id)
+							->first();
+		
+		$related_videos = Content::join('categories as c', 'c.id', '=', 'contents.categories_id')
+							->join('sources as s', 's.id', '=', 'contents.sources_id')
+							->join('users as u', 'u.id', '=', 'contents.users_id')
+							->select('contents.*', 'c.name as categories_name', 's.name as sources_name', 'u.name as users_name', 's.embed_code')
+							->where([
+								['contents.id', '!=', $id],
+								['contents.categories_id', '=', $content->categories_id],
+							])
+							->get(2);
+		$embed_code = $content->embed_code;
+		$id_content = $content->id_content;	
+		$video = $this->getFormat($embed_code, $id_content);
+		$videos[] = array('link', 'title');
+		foreach($related_videos as $v){
+			$eC = $v->embed_code;
+			$iC = $v->id_content;
+			$videos = array()
+				'link' => $this->getFormat($eC, $iC),
+				'title' => $v->title,
+			);
+		}
+		
+		echo "<pre>";
+		print_r($videos);
+		 /*
+		 
+		return view('content/show')
+					->with('title','View Contents ')
+					->with('content', $content)
+					->with('video', $video)
+					->with('related', $videos);
+		 			*/
     }
+	
+	public function getFormat($embed_code, $id_content)
+	{
+		return str_replace("[id]", $id_content, $embed_code);
+	}
 
     /**
      * Show the form for editing the specified recontent.

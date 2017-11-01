@@ -49,7 +49,7 @@ Route::get('/', function () {
 	Route::patch('/master/source/{id}', 'MasterSourceController@update')->name('source.update');
 	Route::get('/master/source/{id}/destroy', 'MasterSourceController@destroy')->name('source.destroy');
 	
-	// Master Category Routes...
+	// Master Content Routes...
 	Route::get('/master/content', 'MasterContentController@index')->name('content');
 	Route::get('/master/content/create', 'MasterContentController@create')->name('content.create');
 	Route::post('/master/content', 'MasterContentController@store')->name('content.store');

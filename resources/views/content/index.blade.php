@@ -37,6 +37,8 @@
 										</td>
                                         <td>{{ $content->watch_count }}</td>
                                         <td>
+											<a class="btn btn-icon waves-effect waves-light btn-primary btn-xs" href="{{ url('master/content/'.Crypt::encrypt($content->id)) }}"> 
+											<i class="fa fa-search"></i></a>
 											<a class="btn btn-icon waves-effect waves-light btn-warning btn-xs" href="{{ url('master/content/'.Crypt::encrypt($content->id).'/edit') }}"> 
 											<i class="fa fa-pencil"></i></a>
 											<a class="btn btn-icon waves-effect waves-light btn-danger btn-xs" onclick="warning_hapus('Do you want to delete this content?','{{ Crypt::encrypt($content->id) }}','{{ $content->id }}')">
