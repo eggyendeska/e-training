@@ -2,6 +2,7 @@
 
 namespace App;
 
+use function foo\func;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -26,12 +27,36 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-	
-	public function isAdmin(){
-		if($this->role == "admin"){
+
+    public function contents()
+    {
+        return $this->hasMany(Content::class,'users_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'users_id');
+    }
+
+    protected static function boot(){
+        parent::boot();
+
+        static::deleting(function($user){
+            $user->contents()->delete();
+            $user->comments()->delete();
+        });
+    }
+
+	public function isAdmin()
+    {
+		if($this->role == "admin")
+		{
 			return true;
-		}else{
-			return false;
+		}
+		else
+        {
+            return redirect('home')->with('alert-danger',
+                'Unauthorized Access is Denied!');
 		}
 	}
 	

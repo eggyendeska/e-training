@@ -11,11 +11,19 @@ class Content extends Model
         'users_id', 'title', 'sources_id', 'id_content', 'description', 'categories_id', 'tags', 'watch_count', 'status', 'note'
     ];
 	
-	public function source(){
-		return $this->belongsTo('App\Source');
+	public function getSource(){
+		return $this->belongsTo(Source::class, 'sources_id');
 	}
 	
-	public function category(){
-		return $this->belongsTo('App\Category');
+	public function getCategory(){
+		return $this->belongsTo(Category::class, 'categories_id');
 	}
+
+	public function getUser(){
+	    return $this->belongsTo(User::class,'users_id');
+    }
+
+    public function comments(){
+	    return $this->morphMany(Comment::class, 'commentable');
+    }
 }

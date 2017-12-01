@@ -15,12 +15,12 @@ class AdminRole
      */
     public function handle($request, Closure $next)
     {
-		if(Auth::check() && Auth::user()->isAdmin()){
-			return $next($request);
-		}else{
-			return redirect('home')->with('alert-danger',
-											'Unauthorized Access is Denied!');
-		}
-        
+        if (! Auth::check() && Auth::user()->isAdmin() == FALSE)
+        {
+            return redirect('home')->with('alert-danger', 'Unauthorized Access is Denied!');
+        }
+
+        return $next($request);
+
     }
 }

@@ -22,7 +22,7 @@ class CreateContentsTable extends Migration
             $table->text('description')->unasigned()->nullable();
             $table->text('note')->unasigned()->nullable();
             $table->integer('categories_id')->references('id')->on('categories')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('tags')->unasigned();
+            $table->string('tags')->unasigned()->nullable();
             $table->integer('watch_count')->unsigned()->nullable();
             $table->integer('status')->unsigned();
             $table->timestamps();

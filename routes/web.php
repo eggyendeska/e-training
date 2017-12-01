@@ -58,3 +58,10 @@ Route::get('/', function () {
 	Route::put('/master/content/{id}', 'MasterContentController@update')->name('content.update');
 	Route::patch('/master/content/{id}', 'MasterContentController@update')->name('content.update');
 	Route::get('/master/content/{id}/destroy', 'MasterContentController@destroy')->name('content.destroy');
+
+	// Comment Routes...
+    Route::post('/comment', 'CommentController@store')->name('comment.store');
+    Route::get('/comment/{id}/destroy', 'CommentController@destroy')->name('comment.delete');
+
+    // Notes Routes...
+    Route::post('/note', 'NoteController@store')->name('note.store');

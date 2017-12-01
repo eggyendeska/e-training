@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Content;
 use App\Category;
 use App\Source;
-use Illuminate\Http\Request;
+use App\Comment;
 use App\Http\Requests\StoreContent;
 use Illuminate\Contracts\Encryption\DecryptException;
 use illuminate\Support\Facades\Auth;
@@ -29,14 +29,11 @@ class MasterContentController extends Controller
      */
     public function index()
     {
-        $contents = Content::join('categories as c', 'c.id', '=', 'contents.categories_id')
-							->join('sources as s', 's.id', '=', 'contents.sources_id')
-							->join('users as u', 'u.id', '=', 'contents.users_id')
-							->select('contents.*', 'c.name as categories_name', 's.name as sources_name', 'u.name as users_name')
-							->get();
-		return view('content/index')
+        $contents = Content::with('getSource','getCategory','getUser')->get();
+        return view('content/index')
 					->with('title','Contents')
-					->with('contents',$contents);	
+					->with('contents',$contents);
+
     }
 
     /**
@@ -91,45 +88,34 @@ class MasterContentController extends Controller
 			return 0;
 		}
 		
-        $content = Content::join('categories as c', 'c.id', '=', 'contents.categories_id')
-							->join('sources as s', 's.id', '=', 'contents.sources_id')
-							->join('users as u', 'u.id', '=', 'contents.users_id')
-							->select('contents.*', 'c.name as categories_name', 's.name as sources_name', 'u.name as users_name', 's.embed_code')
+        $content = Content::with('getSource','getCategory','getUser')
 							->where('contents.id',$id)
 							->first();
-		
-		$related_videos = Content::join('categories as c', 'c.id', '=', 'contents.categories_id')
-							->join('sources as s', 's.id', '=', 'contents.sources_id')
-							->join('users as u', 'u.id', '=', 'contents.users_id')
-							->select('contents.*', 'c.name as categories_name', 's.name as sources_name', 'u.name as users_name', 's.embed_code')
-							->where([
-								['contents.id', '!=', $id],
-								['contents.categories_id', '=', $content->categories_id],
-							])
-							->get(2);
-		$embed_code = $content->embed_code;
+
+
+		$related = Content::with('getSource','getCategory')
+                            ->where([
+                                ['contents.id','!=', $id],
+                                ['contents.categories_id', $content->categories_id]
+                            ])
+                            ->limit(4)
+                            ->get();
+
+        $getComments = Content::with('comments')
+                            ->find($id);
+
+		$comments = $getComments->comments->sortByDesc(Comment::CREATED_AT);
+        $embed_code = $content->getSource->embed_code;
 		$id_content = $content->id_content;	
 		$video = $this->getFormat($embed_code, $id_content);
-		$videos[] = array('link', 'title');
-		foreach($related_videos as $v){
-			$eC = $v->embed_code;
-			$iC = $v->id_content;
-			$videos = array()
-				'link' => $this->getFormat($eC, $iC),
-				'title' => $v->title,
-			);
-		}
-		
-		echo "<pre>";
-		print_r($videos);
-		 /*
-		 
+
 		return view('content/show')
-					->with('title','View Contents ')
+					->with('title','View Contents')
 					->with('content', $content)
 					->with('video', $video)
-					->with('related', $videos);
-		 			*/
+		            ->with('related',$related)
+		            ->with('comments',$comments);
+
     }
 	
 	public function getFormat($embed_code, $id_content)

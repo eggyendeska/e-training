@@ -23,10 +23,10 @@
 									@foreach($contents as $content)
                                     <tr id="{{ $content->id }}">
                                         <td>{{ $content->title }}</td>
-                                        <td>{{ $content->users_name }}</td>
-                                        <td>{{ $content->sources_name }}</td>
+                                        <td>{{ $content->getUser->name }}</td>
+                                        <td>{{ $content->getSource->name }}</td>
                                         <td>{{ $content->description }}</td>
-                                        <td>{{ $content->categories_name }}</td>
+                                        <td>{{ $content->getCategory->name }}</td>
                                         <td>
 										<?php $tags=explode(',', $content->tags); ?>
 										

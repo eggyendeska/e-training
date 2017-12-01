@@ -12,7 +12,7 @@ class Source extends Model
         'name', 'url', 'embed_code','example'
     ];
 	
-	public function content(){
-		return $this->hasMany('App\Content');
+	public function getContents(){
+		return $this->hasMany(Content::class);
 	}
 }

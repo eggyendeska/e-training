@@ -50,10 +50,10 @@
                 }, function (isConfirm) {
                     if (isConfirm) {
 					  $.ajax({
-							type: 'POST',
+							type: 'GET',
 							url: "{{url('master/source')}}/"+b+"/destroy/",
 							success: function(data) {
-							if(data=='1'){
+							if(data===1){
 								swal("Deleted!", "Data has been deleted!", "success");
 								$("#"+c).delay("fast").fadeOut();
 							}else{

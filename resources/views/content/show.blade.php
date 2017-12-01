@@ -7,44 +7,68 @@
         <h3 class="m-t-0 m-b-0">{{ $content->title }}</h3>
 		<hr>
         <p class="text-muted m-b-20">
-          <i>{{ $content->description }}
-          </i>
+          @php $tags=explode(',', $content->tags); @endphp
+          @foreach($tags as $tag)
+            <a href=""><span class="label label-purple">{{ $tag }}</span></a>
+          @endforeach
         </p>
         <p>
 			<div class="videoWrapper col-md-8">
 				<!-- Copy & Pasted from YouTube -->
-				<iframe src="{{ $video }}" frameborder="0" allowfullscreen></iframe>
-			</div>
+          <iframe width="420" height="315"
+                  src="{{$video}}">
+          </iframe>
+        </div>
 			
 			<div class="col-md-3" style="margin-left:20px;">
 				<h3 class="m-t-0 m-b-0">Related Videos</h3>
-				<!-- Copy & Pasted from YouTube -->
 				<hr>
-				<iframe src="{{ $related['link'] }}" frameborder="0" allowfullscreen></iframe>
-				
+                @foreach($related as $rel)
+                  <a href="{{ url('master/content/'. Crypt::encrypt($rel->id)) }}">{{ $rel->title }}</a>
+                  <hr>
+				@endforeach
 			</div>
         </p>
 		<div class="clearfix"></div>
+        <hr>
 		<p class="text-muted m-b-20">
           <p>
-			<?php $tags=explode(',', $content->tags); ?>
-			@foreach($tags as $tag) 
-				<a href="#"><span class="label label-purple">{{ $tag }}</span></a>
-			@endforeach
+          {{ $content->description }}
 		  </p>
         </p>
       </div>
       <div class="clearfix"></div>
     </div>
   </div>
-  <form method="post" class="card-box">
+  @if(Auth::id() == $content->users_id)
+  <!-- Self note -->
+    <form method="post" class="card-box" action="{{ route('note.store') }}" id="notes">
+        {{ csrf_field() }}
+        <input type="hidden" name="content_id" value="{{ $content->id }}">
+        <span class="input-icon icon-right">
+            <h3 class="m-t-0 m-b-0">Self Note (Private)</h3>
+            <hr>
+            <textarea id="elm1" name="note">{{ $content->note }}</textarea>
+        </span>
+        <div class="p-t-10 pull-right">
+            <button type="submit" class="btn btn-sm btn-primary waves-effect waves-light">Send
+            </button>
+        </div>
+        <div class="clearfix"></div>
+    </form>
+  <!-- end Self note -->
+  @endif
+  <form method="post" class="card-box" action="{{ route('comment.store') }}" id="comments">
+    {{ csrf_field() }}
+    <input type="hidden" name="content_id" value="{{ $content->id }}">
     <span class="input-icon icon-right">
-      <textarea rows="2" class="form-control" placeholder="Post a new comment">
-      </textarea>
+      <h3 class="m-t-0 m-b-0">Comments</h3>
+        <hr>
+        <textarea name="body" rows="2" class="form-control" placeholder="Post a new comment"></textarea>
     </span>
     <div class="p-t-10 pull-right">
-      <a class="btn btn-sm btn-primary waves-effect waves-light">Send
-      </a>
+      <button type="submit" class="btn btn-sm btn-primary waves-effect waves-light">Send
+      </button>
     </div>
     <ul class="nav nav-pills profile-pills m-t-10">
       <li>
@@ -74,65 +98,59 @@
     </ul>
   </form>
   <div class="card-box">
-    <div class="comment">
+    @foreach($comments as $comment)
+    <div class="comment" id="{{ $comment->id }}">
       <img src="assets/images/users/avatar-1.jpg" alt="" class="comment-avatar">
       <div class="comment-body">
         <div class="comment-text">
           <div class="comment-header">
-            <a href="#" title="">Kim Ryder
+            <a href="#" title="">{{ $comment->user->name }}
             </a>
-            <span>about 4 hours ago
+            <span>at {{ date_format(date_create($comment->created_at), 'l jS \of F Y h:i:s A') }}
             </span>
+            @if($comment->users_id == Auth::id())
+            <div class="pull-right">
+              <a onclick="warning_hapus('Do you want to delete this comment?','{{ Crypt::encrypt($comment->id) }}','{{ $comment->id }}')"><i class="fa fa-trash"></i></a>
+            </div>
+            @endif
           </div>
-          i'm in the middle of a timelapse animation myself! (Very different
-          though.) Awesome stuff.
-        </div>
-        <div class="comment-footer">
-          <a href="#">
-            <i class="fa fa-thumbs-o-up">
-            </i>
-          </a>
-          <a href="#">
-            <i class="fa fa-thumbs-o-down">
-            </i>
-          </a>
-          <a href="#">Reply
-          </a>
+          {{ $comment->body }}
         </div>
       </div>
     </div>
-    <div class="comment">
-      <img src="assets/images/users/avatar-7.jpg" alt="" class="comment-avatar">
-      <div class="comment-body">
-        <div class="comment-text">
-          <div class="comment-header">
-            <a href="#" title="">Nicolai Larson
-            </a>
-            <span>10 hours ago
-            </span>
-          </div>
-          the parallax is a little odd but O.o that house build is awesome!!
-        </div>
-        <div class="comment-footer">
-          <a href="#">
-            <i class="fa fa-thumbs-o-up">
-            </i>
-          </a>
-          <a href="#">
-            <i class="fa fa-thumbs-o-down">
-            </i>
-          </a>
-          <a href="#">Reply
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="m-t-30 text-center">
-      <a href="" class="btn btn-default waves-effect waves-light btn-sm">Load More...
-      </a>
-    </div>
+    @endforeach
   </div>
 </div>
 </div>
+<script>
+    function warning_hapus(a,b,c) {
+        swal({
+            title: "Are you sure?",
+            text: a,
+            type: "error",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger waves-effect waves-light",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: true,
+            closeOnCancel: true
+        }, function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    type: 'GET',
+                    url: "{{url('comment')}}/"+b+"/destroy",
+                    success: function(data) {
+                        if(data=='1'){
+                            swal("Deleted!", "Comment has been deleted!", "success");
+                            $("#"+c).delay("fast").fadeOut();
+                        }else{
+                            swal("Failed!", "An error happened, action failure!", "error");
+                        }
+                    }
+                })
+            }
+        });
 
+    }
+</script>
 @endsection

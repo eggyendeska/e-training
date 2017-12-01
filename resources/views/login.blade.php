@@ -10,7 +10,7 @@
         <link rel="shortcut icon" href="assets/images/favicon.ico">
 
         <!-- App title -->
-        <title>SIM Rumah Sakik</title>
+        <title>Media Research</title>
 
         <!-- App CSS -->
         <link href="{{ asset('adminto/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
@@ -37,8 +37,8 @@
         <div class="clearfix"></div>
         <div class="wrapper-page">
             <div class="text-center">
-                <a href="index.html" class="logo"><span>Rumah<span>Sakik</span></span></a>
-                <h5 class="text-muted m-t-0 font-600">Sistem Informasi Manajemen</h5>
+                <a href="index.html" class="logo"><span>media<span>Researcher</span></span></a>
+                <h5 class="text-muted m-t-0 font-600">Share the research media, and discuss it!</h5>
             </div>
         	<div class="m-t-40 card-box">
                 <div class="text-center">

@@ -75,7 +75,7 @@
 
                     <!-- LOGO -->
                     <div class="topbar-left">
-                        <a href="index.html" class="logo"><span>e<span>Training</span></span></a>
+                        <a href="index.html" class="logo"><span>media<span>Researcher</span></span></a>
                     </div>
                     <!-- End Logo container-->
 
@@ -201,14 +201,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-xs-6">
-                                2017 © Eggy Endeska.
-                            </div>
-                            <div class="col-xs-6">
-                                <ul class="pull-right list-inline m-b-0">
-                                    <li>
-                                        <a target="_blank()" href="{{ url('https://facebook.com/egi.endeska') }}">Contact</a>
-                                    </li>
-                                </ul>
+                                2017 © MTI Internasional Group
                             </div>
                         </div>
                     </div>
@@ -334,7 +327,7 @@
         <script src="{{ asset('adminto/plugins/datatables/dataTables.responsive.min.js') }}"></script>
         <script src="{{ asset('adminto/plugins/datatables/responsive.bootstrap.min.js') }}"></script>
         <script src="{{ asset('adminto/plugins/datatables/dataTables.scroller.min.js') }}"></script>
-
+        <script src="{{ asset('adminto/pages/jquery.inbox.js') }}"></script>
         <!-- Datatable init js -->
         <script src="{{ asset('adminto/pages/datatables.init.js') }}"></script>
 
@@ -367,5 +360,47 @@
 		<!-- Tags -->
 		<script src="{{ asset('adminto/plugins/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js') }}"></script>
 
+        <!-- Tiny MCE -->
+        <script src="{{ asset('adminto/plugins/tinymce/tinymce.min.js') }}"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                if($("#elm1").length > 0){
+                    tinymce.init({
+                        selector: "textarea#elm1",
+                        theme: "modern",
+                        fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
+                        height:300,
+                        plugins: [
+                            "advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker",
+                            "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime nonbreaking",
+                            "save table contextmenu directionality emoticons template paste textcolor"
+                        ],
+                        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
+                        style_formats: [
+                            {title: 'Bold text', inline: 'b'},
+                            {title: 'Red text', inline: 'span', styles: {color: '#ff0000'}},
+                            {title: 'Red header', block: 'h1', styles: {color: '#ff0000'}},
+                            {title: 'Example 1', inline: 'span', classes: 'example1'},
+                            {title: 'Example 2', inline: 'span', classes: 'example2'},
+                            {title: 'Table styles'},
+                            {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
+                        ]
+                    });
+                }
+            });
+        </script>
+        <script>
+
+        jQuery(document).ready(function(){
+
+            $('.summernote').summernote({
+                height: 320,                 // set editor height
+                minHeight: null,             // set minimum height of editor
+                maxHeight: null,             // set maximum height of editor
+                focus: false                 // set focus to editable area after initializing summernote
+            });
+
+        });
+         </script>
     </body>
 </html>

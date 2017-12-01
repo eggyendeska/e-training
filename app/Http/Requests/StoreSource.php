@@ -47,7 +47,7 @@ class StoreSource extends FormRequest
 					'name' 					=> 'required|string|max:255|unique:sources,id,'. $this->id,
 					'url' 					=> 'required|string|max:255|unique:sources,id,'. $this->id,
 					'embed_code' 			=> 'required|string|max:255',
-					'example' 			=> 'required|string|max:255',
+					'example' 			    => 'required|string|max:255',
 				];
 				
 			}

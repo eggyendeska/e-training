@@ -53,7 +53,7 @@
                 swal({
                     title: "Are you sure?",
                     text: a,
-                    type: "danger",
+                    type: "error",
                     showCancelButton: true,
                     confirmButtonClass: "btn-danger waves-effect waves-light",
                     confirmButtonText: "Yes, delete it!",
@@ -63,7 +63,7 @@
                 }, function (isConfirm) {
                     if (isConfirm) {
 					  $.ajax({
-							type: 'POST',
+							type: 'GET',
 							url: "{{url('user')}}/"+b+"/destroy/",
 							success: function(data) {
 							if(data=='1'){

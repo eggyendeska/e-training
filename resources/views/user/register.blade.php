@@ -48,8 +48,8 @@
 								<div class="form-group" id="role_form">
                                     <label for="role">Role</label>
                                     <select class="form-control select2" name="role" id="role" required>
-										<option>Pilih Role</option>                             
-										<option value="teacher" @if(old('role') == "teacher") Selected @endif>Teacher</option>      
+										<option>Choose Role</option>
+										<option value="researcher" @if(old('role') == "researcher") Selected @endif>Researcher</option>
 										<option value="admin" @if(old('role') == "admin") Selected @endif>Administrator</option>
 									</select>
 
